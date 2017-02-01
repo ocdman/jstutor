@@ -46,6 +46,7 @@ SelectParser = (function(){
           style: option.style.cssText
         });
       }
+      return this.options_index += 1;
     }
   };
   return SelectParser;
@@ -87,6 +88,8 @@ AbstractChosen = (function(){
   
   AbstractChosen.prototype.set_default_values = function(){
     this.results_showing = false;
+    this.active_field = false;
+    this.display_selected_options = this.options.display_selected_options != null ? this.options.display_selected_options : true;
     this.max_selected_options = this.options.max_selected_options || Infinity;  //最多选择项的个数
     this.max_shown_results = this.options.max_shown_results || Number.POSITIVE_INFINITY;  //下拉框最多显式的个数
   };
@@ -110,7 +113,8 @@ AbstractChosen = (function(){
     container_props = {
       'class': container_classes.join(' '),
       'style': 'width: ' + this.container_width() + ';',
-      'title': this.form_field.title
+      'title': this.form_field.title,
+      'tabIndex': -1
     };
     if(this.form_field.id.length){
       container_props.id = this.form_field.id.replace(/[^\w]/g, '_') + '_chosen';
@@ -135,6 +139,11 @@ AbstractChosen = (function(){
   AbstractChosen.prototype.register_observers = function(){
     var _this = this;
 
+    this.container.bind('blur.chosen', function(evt){
+      _this.results_hide();
+      _this.close_field();
+    });
+
     this.search_results.bind('mouseover.chosen', function(evt){
       _this.search_results_mouseover(evt);
     });
@@ -153,6 +162,7 @@ AbstractChosen = (function(){
         _this.choices_click(evt);
       });
     }
+
   };
   
   AbstractChosen.prototype.on_ready = function(){
@@ -170,6 +180,14 @@ AbstractChosen = (function(){
   //单击选择项
   AbstractChosen.prototype.choices_click = function(evt){
     evt.preventDefault();
+    this.activate_field();
+    if(!((evt != null)  && ($(evt.target)).hasClass('search-choice-close'))){
+      if(!this.active_field){
+        if(this.is_multiple){
+          this.search_field.val('');
+        }
+      }
+    }
     if(!(this.results_showing || this.is_disable)){
       return this.results_show();
     }
@@ -287,7 +305,15 @@ AbstractChosen = (function(){
     tmp = document.createElement('div');
     tmp.appendChild(el);
     return tmp.innerHTML;
-  }
+  };
+
+  AbstractChosen.prototype.choice_label = function(item) {
+    return item.html;
+  };
+
+  AbstractChosen.prototype.mouse_leave = function(evt){
+    return;
+  };
   
   AbstractChosen.default_multiple_text = "Select some options";
   
@@ -355,7 +381,7 @@ Chosen = (function(_super){
     }
     this.container.addClass('chosen-with-drop');
     this.results_showing = true;
-    this.search_field.focus();
+    // this.search_field.focus();
     this.search_field.val(this.search_field.val());
     this.winnow_results();
     return this.form_field_jq.trigger('chosen: showing_dropdown',{
@@ -398,7 +424,8 @@ Chosen = (function(_super){
           'data-option-array-index': item.array_index
         });
         close_link.bind('click.chosen', function(evt){
-          return _this.choice_destory_link_click(evt);
+          return _this.choice_destroy_link_click(evt);
+          //return;
         });
         choice.append(close_link);
       }
@@ -409,15 +436,15 @@ Chosen = (function(_super){
       evt.preventDefault();
       evt.stopPropagation();
       if(!this.is_disable){
-        return this.choice_destory($(evt.target));
+        return this.choice_destroy($(evt.target));
       }
     };
 
-    Chosen.prototype.choice_destory = function(link){
+    Chosen.prototype.choice_destroy = function(link){
       if(this.result_deselect(link[0].getAttribute('data-option-array-index'))){
         this.show_search_field_default();
         if(this.is_multiple && this.choices_count() > 0 && this.search_field.val().length < 1){
-          this.result_hide();
+          //this.results_hide();
         }
         link.parents('li').first().remove();
         return this.search_field_scale();
@@ -453,7 +480,90 @@ Chosen = (function(_super){
     };
 
     Chosen.prototype.search_results_mouseup = function(evt){
-      
+      var target;
+      target = $(evt.target).hasClass('active-result') ? $(evt.target) : $(evt.target).parents('.active-result').first();
+      if(target.length){
+        this.result_highlight = target;
+        this.result_select(evt);
+        // return this.search_field.focus();
+      }
+    };
+
+    Chosen.prototype.result_select = function(evt){
+      var high, item;
+      if(this.result_highlight){
+        high = this.result_highlight;
+        this.result_clear_highlight();
+        if(this.is_multiple){
+          high.removeClass('active-result');
+        }
+        high.addClass('result-selected');
+        item = this.results_data[high[0].getAttribute('data-option-array-index')];
+        item.selected = true;
+        this.form_field.options[item.options_index].selected = true;
+        this.selected_option_count = null;
+        if(this.is_multiple){
+          this.choice_build(item);
+        }
+        this.show_search_field_default();
+        evt.preventDefault();
+      }
+    };
+
+    Chosen.prototype.show_search_field_default = function(){
+      if(this.is_multiple && this.choices_count() < 1 && !this.active_field){
+        this.search_field.val(this.default_text);
+        return this.search_field.addClass('default');
+      }else{
+        this.search_field.val('');
+        return this.search_field.removeClass('default');
+      }
+    };
+
+    Chosen.prototype.results_hide = function(){
+      if(this.results_showing){
+        this.result_clear_highlight();
+        this.container.removeClass('chosen-with-drop');
+      }
+      return this.results_showing = false;
+    };
+
+    Chosen.prototype.result_deselect = function(pos){
+      var result_data, search_result;
+      result_data = this.results_data[pos];
+      search_result = this.search_results.find('li')[pos];
+      if(!this.form_field.options[result_data.options_index].disabled){
+        result_data.selected = false;
+        this.form_field.options[result_data.options_index].selected = false;
+        $(search_result).removeClass('result-selected');
+        $(search_result).addClass('active-result');
+        return true;
+      }else{
+        return false;
+      }
+    };
+
+    Chosen.prototype.activate_field = function() {
+      this.container.addClass('chosen-container-active');
+      this.active_field = true;
+    };
+
+    Chosen.prototype.close_field = function(){
+      this.container.removeClass('chosen-container-active');
+      this.active_field = false;
+    };
+
+    //获得选择条件的顺序
+    Chosen.prototype.get_choice_order = function(){
+      var result = '';
+      var ja = this.search_choices.find('li.search-choice span');
+      if(ja.length > 0) {
+        ja.each(function(index,element){
+          result += $(element).text() + ',';
+        });
+        result = result.substr(0, result.lastIndexOf(','));
+      }
+      return result;
     };
 
   return Chosen;
@@ -464,11 +574,12 @@ Chosen = (function(_super){
   
   
   // $.ready(function(){
-    var config = {
-      '.chosenlite': {}
-    };
-    for(var selector in  config){
-      $(selector).chosen(config[selector]);
-    }
+    // var config = {
+    //   '.chosenlite': {}
+    // };
+    // for(var selector in  config){
+    //   $(selector).chosen(config[selector]);
+    // }
   // });
+
 })(jQuery);
