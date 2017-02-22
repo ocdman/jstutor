@@ -1,0 +1,51 @@
+<html>
+<head>
+	<style type="text/css">
+		.clearfix:after {
+			content: '.';
+			display: block;
+			height: 0;
+			visibility: hidden;
+			clear: both;
+		}
+
+		#wrapper {
+			width: 960px;
+			margin: 0 auto;
+			border: 1px solid;
+		}
+
+		nav {
+			width: 150px;
+			float: left;
+			background: #dcd9c0;
+		}
+
+		nav li {
+			list-style-type: none;
+		}
+
+		article{
+			width: 810px;
+			float: left;
+			background: #ffed53;
+		}
+	</style>
+</head>
+<body>
+	<div id="wrapper" class="clearfix">
+		<nav id="navigate">
+			<li>link 1</li>
+			<li>link 2</li>
+			<li>link 3</li>
+		</nav>
+		<article id="article">
+			简单的居中的单栏布局
+		</article>
+	</div>
+	<script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+	<script type="text/javascript" src="js/underscore-min.js"></script>
+	<script type="text/javascript" src="js/backbone-min.js"></script>
+	<script type="text/javascript" src="js/app.js"></script>
+</body>
+</html>
