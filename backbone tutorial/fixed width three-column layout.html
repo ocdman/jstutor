@@ -1,5 +1,6 @@
 <html>
 <head>
+	<title>Shelf of Books</title>
 	<style type="text/css">
 		.clearfix:after {
 			content: '.';
@@ -15,17 +16,13 @@
 			border: 1px solid;
 		}
 
-		nav {
+		#input {
 			width: 150px;
 			float: left;
 			background: #dcd9c0;
 		}
 
-		nav li {
-			list-style-type: none;
-		}
-
-		article{
+		#output{
 			width: 810px;
 			float: left;
 			background: #ffed53;
@@ -34,14 +31,14 @@
 </head>
 <body>
 	<div id="wrapper" class="clearfix">
-		<nav id="navigate">
-			<li>link 1</li>
-			<li>link 2</li>
-			<li>link 3</li>
-		</nav>
-		<article id="article">
-			简单的居中的单栏布局
-		</article>
+		<div id="input">
+			title: <input type="text" name="title">
+			author: <input type="text" name="author">
+			description: <input type="text" name="decription">
+			<input type="button" value="OK">
+		</div>
+		<div id="output">
+		</div>
 	</div>
 	<script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
 	<script type="text/javascript" src="js/underscore-min.js"></script>

@@ -1,13 +1,15 @@
-var Navi = Backbone.Model.extend({
+var Book = Backbone.Model.extend({
 	defaults: {
-
+		'author': null,
+		'title': null,
+		'description': null
 	}
 });
 
-var navView = Backbone.View.extend({
-	el: '#navigate',
+var inputView = Backbone.View.extend({
+	el: '#input',
 	events: {
-		'click li': 'openLink'
+		'click input[type=button]': 'openLink'
 	},
 	openLink: function(e){
 		this.article.$el.html(e.target.innerHTML);
