@@ -1,5 +1,6 @@
 <html>
 <head>
+	<meta charset="utf-8">
 	<title>Shelf of Books</title>
 	<style type="text/css">
 		.clearfix:after {
@@ -21,9 +22,15 @@
 			float: left;
 			background: #dcd9c0;
 		}
-
 		#output{
-			width: 810px;
+			white-space: pre-wrap;
+			width: 660px;
+			float: left;
+			background: #f9f2f4;
+			color: #c7254e;
+		}
+		#attr {
+			width: 150px;
 			float: left;
 			background: #ffed53;
 		}
@@ -32,17 +39,45 @@
 <body>
 	<div id="wrapper" class="clearfix">
 		<div id="input">
-			title: <input type="text" name="title">
-			author: <input type="text" name="author">
-			description: <input type="text" name="decription">
-			<input type="button" value="OK">
 		</div>
 		<div id="output">
 		</div>
+		<div id="attr">
+		</div>
 	</div>
+
+	<script type="text/template" id="inputTemplate">
+		<div>
+			<label>author: </label>
+			<input type="text" name="author" value="<%= author %>"/>
+			<label>title: </label>
+			<input type="text" name="title" value="<%= title %>"/>
+			<label>description: </label>
+			<input type="text" name="description" value="<%= description %>"/>
+			<input type="button" value="Save"/>
+		</div>
+	</script>
+
+	<script type="text/template" id="attrTemplate">
+		<% _.each(books, function(book) { %>
+			<div>
+				<label>author: </label>
+				<label><%= book.author %></label>
+				<label>title: </label>
+				<label><%= book.title %></label>
+				<label>description: </label>
+				<label><%= book.description %></label>
+				<a href="#book/<%= book.id %>/edit">Edit</a>
+				<a href="#book/<%= book.id %>/delete">Delete</a>
+			</div>
+		<% }); %>
+	</script>
+
 	<script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
 	<script type="text/javascript" src="js/underscore-min.js"></script>
 	<script type="text/javascript" src="js/backbone-min.js"></script>
+	<script type="text/javascript" src="js/backbone.localStorage.js"></script>
 	<script type="text/javascript" src="js/app.js"></script>
+
 </body>
 </html>
