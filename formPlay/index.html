@@ -1,0 +1,60 @@
+<html>
+<head>
+</head>
+<body>
+	<script type="text/template" id="tpl-toolboxArea">
+		<a class="r_close">
+			<i class="icon-chevron-left"></i>
+		</a>
+		<div class="toolboxAreaTab">
+			<label>工具箱</label>
+		</div>
+		<div class="controlList active">
+			<div bind="accordion">
+	            <h3>基础控件</h3>
+	            <div style="padding: 0px; padding-bottom: 5px;">
+	                {{#each  tools}}
+	                <div bind="accordion2">
+	                    <h3>{{name}}</h3>
+	                    <div style=" padding:0px; padding-bottom:5px;">
+	                        {{#each controls}}
+	                        <div class="controlFace" controltype="{{type}}">{{name}}</div>
+	                        {{/each}}
+	                    </div>
+	                </div>
+
+	                {{/each}}
+	            </div>
+
+	            <h3>元件</h3>
+	            <div style="padding:5px;">
+	                {{#each toolkits}}
+	                <div bind="accordion2">
+	                    <h3>{{name}}</h3>
+	                    <div style=" padding:0px; padding-bottom:5px;">
+	                        {{#each components}}
+	                        <div class="controlFace controlGroupFace" controltype="group_{{id}}">{{name}}</div>
+	                        {{/each}}
+	                    </div>
+	                </div>
+	                {{/each}}
+	            </div>
+
+	            <h3>表单组</h3>
+	            <div style="padding:5px;">
+	                {{#each sets}}
+	                <div bind="accordion2">
+	                    <h3>{{name}}</h3>
+	                    <div style=" padding:0px; padding-bottom:5px;">
+	                        {{#each sets}}
+	                        <div class="controlFace controlSetFace" controltype="set_{{id}}">{{name}}</div>
+	                        {{/each}}
+	                    </div>
+	                </div>
+	                {{/each}}
+	            </div>
+	        </div>
+		</div>
+	</script>
+</body>
+</html>
