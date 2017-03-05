@@ -59,6 +59,8 @@
 			return create;
 		})();
 
+		window.mvcHelper = mvcHelper;
+
 	})();
 
 
@@ -66,7 +68,7 @@
 
 		var mvcHelperExtend = {};
 
-		mvcHelperExtend.AppRouter = Backbone.Route.extend({
+		mvcHelperExtend.AppRouter = Backbone.Router.extend({
 			appView: null,
 			routes: {
 				':cid/:sort/linkSort': 'linkSort',
@@ -109,38 +111,40 @@
 					this.toolkits = options.toolbox.toolkits;
 					this.sets = options.toolbox.sets;
 
-					this.toolboxArea = new mvcHelperExtend.controlBoxView({
-						className: 'toolboxArea',
+					this.controlsArea = new (mvcHelperExtend.controlBoxView({
+						className: 'controlsArea',
 						toolbox: {
 							tools: this.tools,
 							toolkits: this.toolkits,
 							sets: this.sets
 						},
 						appRouter: appRouter
-					})();
+					}))();
 
-					this.attrArea = new mvcHelperExtend.controlAttrView({
+					this.attrArea = new (mvcHelperExtend.controlAttrView({
 						className: 'attrArea',
 						appRouter: appRouter
-					})();
+					}))();
 
 					var structureJson = this.model.get('structureJson');
 					structureJson = (Array.isArray(structureJson) && structureJson.length > 0) ? structureJson[0] : null;
 
-					pageModel = ControlList.createControlModel('page', structureJson, {
-						appRouter: appRouter,
-						modelList: modelList
-					});
+					// pageModel = ControlList.createControlModel('page', structureJson, {
+					// 	appRouter: appRouter,
+					// 	modelList: modelList
+					// });
 
-					this.designArea = new mvcHelperExtend.controlDesignView({
+					pageModel = null;
+
+					this.designArea = new (mvcHelperExtend.controlDesignView({
 						model: pageModel,
 						className: 'designArea'
-					});
+					}))();
 				},
 				render: function(){
 					this.dragSort = {};
-					this.$el.append(this.toolboxArea.render().el);
-					this.dragSort.$drag = this.toolboxArea.$drag();
+					this.$el.append(this.controlsArea.render().el);
+					this.dragSort.$drag = this.controlsArea.$drag();
 					this.$el.append(this.designArea.render().el);
 					this.$el.append(this.attrArea.render().el);
 					return this;
@@ -177,29 +181,28 @@
 			var appRouter = options.appRouter;
 			return Backbone.View.extend({
 				className: options.className,
-				template: $('#tpl-toolboxArea').html(),
-				initialize: {
-
+				template: $('#tpl-controlsArea').html(),
+				initialize: function(){
 				},
 				render: function(){
-					var tools = options.toolbox.tools.group(function(tool){
-						return tool.category ? tool.category : null;
+					var controls = options.toolbox.tools.group(function(control){
+						return control.category ? control.category : null;
 					});
 					options.toolbox.tools = [];
-					for(var name in tools){
+					for(var name in controls){
 						options.toolbox.tools.push({
 							name: name, 
-							tools: tools[name]
+							controls: controls[name]
 						});
 					}
-					var toolkits = options.toolbox.toolkits.group(function(toolkit){
-						return toolkit.category ? toolkit.category.Name : null;
+					var components = options.toolbox.toolkits.group(function(component){
+						return component.category ? component.category.Name : null;
 					});
-					options.toolbox.toolkits = [];
-					for(var name in toolkits){
+					options.toolbox.components = [];
+					for(var name in components){
 						options.toolbox.toolkits.push({
 							name: name,
-							toolkits: toolkits[name]
+							components: components[name]
 						});
 					}
 					var sets = options.toolbox.sets.group(function(set){
@@ -215,6 +218,19 @@
 					this.$el.html(Handlebars.compile(this.template)(options.toolbox));
 					this.drag();
 					return this;
+				},
+				drag: function(){
+					this.$drag().draggable({
+						helper: 'clone',
+						revert: 'invalid',
+						cursor: 'move'
+					});
+				},
+				$drag: function(){
+					return this.$controls();
+				},
+				$controls: function(){
+					return this.$('.controlList').find('.controlFace');
 				}
 			});
 		};
@@ -228,10 +244,13 @@
 				},
 				render: function(){
 					this.$el.empty();
-					return;
+					return this;
 				}
 			});
 		};
+
+		window.mvcHelperExtend = mvcHelperExtend;
+
 	})();
 
 })();
