@@ -217,6 +217,9 @@
 					}
 					this.$el.html(Handlebars.compile(this.template)(options.toolbox));
 					this.drag();
+					this.$el.find('[bind=accordion]').accordion({collapsible: true, active: false});
+					this.$el.find('[bind=accordion2]').accordion({collapsible: true, active: false});
+					this.$el.find('.ui-accordion-content').css({ height: 'auto' });
 					return this;
 				},
 				drag: function(){

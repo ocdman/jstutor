@@ -1,9 +1,10 @@
 window.ControlList = {};
 
 (function($){
+	var common = '通用';
 	ControlList.list = (function(){
 		return [
-			{ name: '文本框', type: 'text'}
+			{ name: '文本框', type: 'text', category: common}
 		];
 	})();
 

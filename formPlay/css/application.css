@@ -21,9 +21,9 @@ html,body{ height:100%; font-family: "微软雅黑"; color:#666;}  /*不允许�
 .designArea.active .controlItemDesign .wrapper_btn { display:none;}
 .designAreaInterior:after {clear:both; display:table; content:""; }
 
-.controlAttr { width:20%; background:#fff; border-left:1px solid #d8d8d8; padding:0; margin-left:80%; /*right:-280px;*/ top:0; 
+.attrArea { width:20%; background:#fff; border-left:1px solid #d8d8d8; padding:0; margin-left:80%; /*right:-280px;*/ top:0; 
                position:absolute; height:95%; overflow:auto;}
-.controlAttr h3 {padding: 10px;font-size: 18px;font-weight: bold; height:44px;}
+.attrArea h3 {padding: 10px;font-size: 18px;font-weight: bold; height:44px;}
 
 .controlsArea .controlsAreaTab{ border-bottom: 1px solid #d8d8d8; height: 30px; margin: 0 -15px;}
 
@@ -85,14 +85,14 @@ background: linear-gradient(top,#ffffff 0%,#ebebeb 90%,#f5f5f5 100%); */ }
 
 .addRow { color:#09F; }
 
-.controlAttr table {width:100%;}
-.controlAttr table td{ border-bottom:1px solid #CCC; padding:10px;}
-.controlAttr table tr:first-child td{ border-top:1px solid #CCC;}
+.attrArea table {width:100%;}
+.attrArea table td{ border-bottom:1px solid #CCC; padding:10px;}
+.attrArea table tr:first-child td{ border-top:1px solid #CCC;}
 
 
 
-.controlAttr .icon-minus{color: #ccc; font-size:18px; line-height:24px;  padding:0 10px; cursor:pointer;}
-.controlAttr .icon-minus:hover{ color:#F00;}
+.attrArea .icon-minus{color: #ccc; font-size:18px; line-height:24px;  padding:0 10px; cursor:pointer;}
+.attrArea .icon-minus:hover{ color:#F00;}
 .wrapper_btn {width: 65px;position: absolute; bottom:-1px;right: 0; display:none; text-align:right; height:18px;}
 
 .add_btn i {color: #2ecc71; }
@@ -109,8 +109,8 @@ background: linear-gradient(top,#ffffff 0%,#ebebeb 90%,#f5f5f5 100%); */ }
 
 .r_close {display: block;  cursor:pointer; position: absolute; top: 0;right: 0; color:#fff; border-left:1px solid #ccc; border-bottom:1px solid #ccc;}
 .r_close:hover i { color:#169be8;}
-.controlAttr .r_close {width:32px; height:32px !important; background: rgba(128, 128, 128 ,0.2); top: 0;right: 0; }
-.controlAttr .r_close i { line-height:32px; font-size: 16px;margin-left:9px;}
+.attrArea .r_close {width:32px; height:32px !important; background: rgba(128, 128, 128 ,0.2); top: 0;right: 0; }
+.attrArea .r_close i { line-height:32px; font-size: 16px;margin-left:9px;}
 
 .controlsArea {overflow-x:hidden;}
 .controlsArea .r_close { width:32px; height:32px; background: rgba(128, 128, 128 ,0.25); text-align: center;line-height:32px;}
