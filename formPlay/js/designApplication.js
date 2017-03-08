@@ -16,6 +16,10 @@
 		model: new mvcHelper.model()
 	});
 
+	appRouter.appView = appView; 
+
+	Backbone.history.start();
+
 	$('body').append(appView.render().el);
 
 })($);
