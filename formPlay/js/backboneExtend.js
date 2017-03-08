@@ -94,8 +94,9 @@
 			}
 		});
 
+		//程序入口视图
 		mvcHelperExtend.AppView = function(options){
-			var formTypeCName = {0: '表单'};
+			var formTypeCName = {0: '表单', 1: '元件', 2: '表单组'};
 			var appRouter = options.appRouter;
 			var pageModel;
 			var modelList = [];
@@ -103,7 +104,19 @@
 			return Backbone.View.extend({
 				className: options.className,
 				saveTemplate: function(){
-					return $('#tpl-designArea-savebar').html()
+					return $('#tpl-designArea-saveBar').html()
+				},
+				bindings: {
+					'.saveBar': {
+						observe: ['Id', 'FormType'],
+						updateMethod: 'html',
+						onGet: function(value, options){
+							// var json = this.model.toJSON();
+							// json.formTypeCName = formTypeCName[json.FormType];
+							// return Handlebars.compile(this.saveTemplate())(json);
+							return Handlebars.compile(this.saveTemplate())();
+						}
+					}
 				},
 				initialize: function(options){
 					this.modelList = modelList
@@ -129,29 +142,34 @@
 					var structureJson = this.model.get('structureJson');
 					structureJson = (Array.isArray(structureJson) && structureJson.length > 0) ? structureJson[0] : null;
 
-					// pageModel = ControlList.createControlModel('page', structureJson, {
-					// 	appRouter: appRouter,
-					// 	modelList: modelList
-					// });
-
-					pageModel = null;
+					pageModel = ControlList.createControlModel('page', structureJson, {
+						appRouter: appRouter,
+						modelList: modelList
+					});
 
 					this.designArea = new (mvcHelperExtend.controlDesignView({
-						model: pageModel,
 						className: 'designArea'
-					}))();
+					}))({
+						model: pageModel
+					});
 				},
 				render: function(){
 					this.dragSort = {};
+					this.$el.append('<div class="saveBar"></div>');
 					this.$el.append(this.controlsArea.render().el);
 					this.dragSort.$drag = this.controlsArea.$drag();
 					this.$el.append(this.designArea.render().el);
 					this.$el.append(this.attrArea.render().el);
+					this.stickit();
 					return this;
+				},
+				appendControl: function(type){
+					this.designArea.appendControl();
 				}
 			});
 		};
 
+		//控件设计视图
 		mvcHelperExtend.controlDesignView = function(options){
 			return Backbone.View.extend({
 				className: options.className,
@@ -177,48 +195,21 @@
 			});
 		};
 
+		//控件集合视图
 		mvcHelperExtend.controlBoxView = function(options){
 			var appRouter = options.appRouter;
 			return Backbone.View.extend({
 				className: options.className,
 				template: $('#tpl-controlsArea').html(),
+				events: {
+					'click .controlFace': 'select'
+				},
 				initialize: function(){
 				},
 				render: function(){
-					var controls = options.toolbox.tools.group(function(control){
-						return control.category ? control.category : null;
-					});
-					options.toolbox.tools = [];
-					for(var name in controls){
-						options.toolbox.tools.push({
-							name: name, 
-							controls: controls[name]
-						});
-					}
-					var components = options.toolbox.toolkits.group(function(component){
-						return component.category ? component.category.Name : null;
-					});
-					options.toolbox.components = [];
-					for(var name in components){
-						options.toolbox.toolkits.push({
-							name: name,
-							components: components[name]
-						});
-					}
-					var sets = options.toolbox.sets.group(function(set){
-						return set.category ? set.category.Name : null;
-					});
-					options.toolbox.sets = [];
-					for(var name in sets){
-						options.toolbox.sets.push({
-							name: name, 
-							sets: sets[name]
-						});
-					}
 					this.$el.html(Handlebars.compile(this.template)(options.toolbox));
 					this.drag();
 					this.$el.find('[bind=accordion]').accordion({collapsible: true, active: false});
-					this.$el.find('[bind=accordion2]').accordion({collapsible: true, active: false});
 					this.$el.find('.ui-accordion-content').css({ height: 'auto' });
 					return this;
 				},
@@ -234,10 +225,15 @@
 				},
 				$controls: function(){
 					return this.$('.controlList').find('.controlFace');
+				},
+				select: function(e){
+				   	appRouter.navigate($(e.target).attr('controltype') + '/append', { trigger: true })
+					appRouter.navigate('', {trigger: true});
 				}
 			});
 		};
 
+		//控件属性视图
 		mvcHelperExtend.controlAttrView = function(options){
 			var appRouter = options.appRouter;
 			return Backbone.View.extend({

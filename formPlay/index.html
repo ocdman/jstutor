@@ -1,9 +1,13 @@
 <html>
 <head>
+	<meta charset="utf-8">
 	<link href="css/lib/jquery-ui.css" rel="stylesheet">
+	<link href="css/lib/bootstrap.min.css" rel="stylesheet">
 	<link href="css/jquery-ui-1.8.1.custom.css" rel="stylesheet">
+	<link href="css/controlbase.css" rel="stylesheet">
 	<link href="css/application.css" rel="stylesheet">
 	<link href="css/layout.css" rel="stylesheet">
+
 </head>
 <body>
 	<script type="text/template" id="tpl-controlsArea">
@@ -15,55 +19,43 @@
 		</div>
 		<div class="controlList active">
 			<div bind="accordion">
-	            <h3>基础控件</h3>
+	            <h3>控件</h3>
 	            <div style="padding: 0px; padding-bottom: 5px;">
 	                {{#each  tools}}
-	                <div bind="accordion2">
-	                    <h3>{{name}}</h3>
-	                    <div style=" padding:0px; padding-bottom:5px;">
-	                        {{#each controls}}
-	                        <div class="controlFace" controltype="{{type}}">{{name}}</div>
-	                        {{/each}}
-	                    </div>
-	                </div>
-
+                        <div class="controlFace" controltype="{{type}}">{{name}}</div>
 	                {{/each}}
 	            </div>
 
 	            <h3>元件</h3>
 	            <div style="padding:5px;">
 	                {{#each toolkits}}
-	                <div bind="accordion2">
-	                    <h3>{{name}}</h3>
-	                    <div style=" padding:0px; padding-bottom:5px;">
-	                        {{#each components}}
-	                        <div class="controlFace controlGroupFace" controltype="group_{{id}}">{{name}}</div>
-	                        {{/each}}
-	                    </div>
-	                </div>
+                        <div class="controlFace controlGroupFace" controltype="group_{{id}}">{{name}}</div>
 	                {{/each}}
 	            </div>
 
 	            <h3>表单组</h3>
 	            <div style="padding:5px;">
 	                {{#each sets}}
-	                <div bind="accordion2">
-	                    <h3>{{name}}</h3>
-	                    <div style=" padding:0px; padding-bottom:5px;">
-	                        {{#each sets}}
-	                        <div class="controlFace controlSetFace" controltype="set_{{id}}">{{name}}</div>
-	                        {{/each}}
-	                    </div>
-	                </div>
+                        <div class="controlFace controlSetFace" controltype="set_{{id}}">{{name}}</div>
 	                {{/each}}
 	            </div>
 	        </div>
 		</div>
 	</script>
+
+	<script type="text/template" id="tpl-designArea-saveBar">
+		<div class="saveButtonGroups" style="display:inline;">
+			<input type="button" class="saveButton" value="保存为表单组" formtype="2" />
+	        <input type="button" class="saveButton" value="保存为元件" formtype="1" />
+	        <input type="button" class="saveButton" value="保存为表单" formtype="0" /
+		</div>
+	</script>
+
 	<script type="text/javascript" src="js/lib/jquery-3.1.1.min.js"></script>
 	<script type="text/javascript" src="js/lib/underscore-min.js"></script>
 	<script type="text/javascript" src="js/lib/backbone-min.js"></script>
 	<script type="text/javascript" src="js/lib/backbone.localStorage.js"></script>
+	<script type="text/javascript" src="js/lib/backbone.stickit.min.js"></script>
 	<script type="text/javascript" src="js/lib/handlebars.min.js"></script>
 	<script type="text/javascript" src="js/lib/jquery-ui.js"></script>
 	<script type="text/javascript" src="js/toolbox.js"></script>

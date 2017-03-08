@@ -33,6 +33,9 @@ function guid() {
    return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
 };
 
+//把guid这个方法暴露出去
+window.guid = guid;
+
 // Our Store is represented by a single JS object in *localStorage*. Create it
 // with a meaningful name, like the name you'd give a table.
 // window.Store is deprecated, use Backbone.LocalStorage instead

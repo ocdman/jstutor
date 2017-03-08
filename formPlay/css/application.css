@@ -25,12 +25,12 @@ html,body{ height:100%; font-family: "微软雅黑"; color:#666;}  /*不允许�
                position:absolute; height:95%; overflow:auto;}
 .attrArea h3 {padding: 10px;font-size: 18px;font-weight: bold; height:44px;}
 
-.controlsArea .controlsAreaTab{ border-bottom: 1px solid #d8d8d8; height: 30px; margin: 0 -15px;}
+.controlsArea .controlsAreaTab{ border-bottom: 1px solid #d8d8d8; height: 60px; margin: 0 -15px;}
 
-.controlsArea .controlsAreaTab label{float: left; font:14px "微软雅黑"; font-weight: bold; height:35px; line-height:33px; padding:0 10px;}
+.controlsArea .controlsAreaTab label{float: left; font:14px "微软雅黑"; font-weight: bold; height:30px; line-height:30px; padding:0 10px;}
 .controlsArea .controlsAreaTab label.active{ border-radius:3px 3px 0 0; border:1px solid #d8d8d8; border-bottom: none;}
 
-.controlList,.controlGroupList{display:none; margin: 10px -15px;}
+.controlList,.controlGroupList{display:none; margin: 0 -15px;}
 .controlList.active,.controlGroupList.active{display:block;}
 .controlList .controlFace{ background:#169be8; color:#fff; min-width:80px; float:left; margin-left:15px; text-align: center; border-radius: 2px;
 height: 30px; line-height: 30px; margin-top: 10px; cursor:pointer; transition:.3s ease-in; padding: 0 5px; }
