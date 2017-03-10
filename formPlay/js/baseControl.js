@@ -1,6 +1,6 @@
 window.ControlList = {};
 
-(function($){
+(function($, ControlList, mvcHelper, mvcHelperExtend){
 	ControlList.list = (function(){
 		return [
 			{ name: '文本框', type: 'text' }
@@ -65,12 +65,29 @@ window.ControlList = {};
 		return model;
 	};
 
+	ControlList.pubFun = (function(){
+		return {
+			getTemplate: function(id){
+				var $target = $('#' + id);
+				if($target.length === 0){
+					console.log('模板"' + id + '"不存在');
+					return;
+				}else{
+					return $target.html();
+				}
+			}
+		};
+	})();
+
 	ControlList._control = (function(){
 		return {
 			name: '',
 			type: '',
-			property: {},
+			property: {
+				 canSelectDesignView: true
+			},
 			designMethod: {},
+			viewTemplate: {},
 			rebuild: function(values){
 				if(!values){
 					return;
@@ -100,11 +117,11 @@ window.ControlList = {};
 			name: '',
 			type: 'base',
 			property: ControlList.config.controlDefaultProperty,
+			viewTemplate: {
+				design: function(){ return ''; }
+			},
 			newObj: function(values){
 				var base = $.extend(true, {}, ControlList._control.newObj(values), this);
-				if(typeof values === 'object'){
-					base.rebuild(values);
-				}
 				base = $.extend(true, base, base.property);
 				return base;
 			}
@@ -116,18 +133,30 @@ window.ControlList = {};
 			name: '页面',
 			type: 'page',
 			designMethod: {
-				appendControl: function(){
-
+				$controlsArea: function(){
+					return this.$('> .designAreaInterior');
+				},
+				renderOne: function(controlModel){
+					var view = new mvcHelperExtend.controlDesignView({
+						model: controlModel
+					});
+					this.$controlsArea().append(view.render().el);
+				},
+				appendControl: function(model){
+					this.renderOne(model);	//渲染
+					model.view.select();	//选中
 				}
 			},
-			newObj: function(values, options){
-				var base = $.extend(true, {}, ControlList.baseControl.newObj(), this);
-				if(typeof values === 'object'){
-					base.rebuild(values);
+			viewTemplate: {
+				design: function() { 
+					return ControlList.pubFun.getTemplate('tpl-pageDesign'); 
 				}
+			},
+			newObj: function(values){
+				var base = $.extend(true, {}, ControlList.baseControl.newObj(values), this);
 				base = $.extend(true, base, base.property);
 				return base;
 			}
 		};
 	})();
-})($);
+})($, ControlList, mvcHelper, mvcHelperExtend);

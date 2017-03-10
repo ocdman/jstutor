@@ -1,13 +1,10 @@
-(function($){
+(function($, ControlList, mvcHelper, mvcHelperExtend){
 
 	var appRouter = new mvcHelperExtend.AppRouter();
 
-	var _appView = new mvcHelperExtend.AppView({
+	var appView = new mvcHelperExtend.AppView({
 		className: 'bodyDiv',
-		appRouter: appRouter
-	});
-
-	var appView = new _appView({
+		appRouter: appRouter,
 		toolbox: {
 			tools: ControlList.list,
 			toolkits: [],
@@ -22,4 +19,4 @@
 
 	$('body').append(appView.render().el);
 
-})($);
+})($, ControlList, mvcHelper, mvcHelperExtend);
