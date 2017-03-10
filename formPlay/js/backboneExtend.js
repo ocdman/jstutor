@@ -212,7 +212,7 @@
 						return this;
 					},
 					select: function(e){
-						if(this.model.get)
+						//if(this.model.get)
 					}
 				});
 				return new viewExtend(options);
