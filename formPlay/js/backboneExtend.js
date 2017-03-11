@@ -33,7 +33,7 @@
 				callback();
 			}
 		}
-	};
+	};	//拷贝model相对应区域的属性到视图，然后渲染视图。这里的this是指  视图，需要用call来调用这个方法，如：render.call(mvc视图,viewPlace)。
 
 	(function(){
 
@@ -151,14 +151,14 @@
 						this.designArea = new mvcHelperExtend.controlDesignView({
 							className: 'designArea',
 							model: pageModel
-						});
+						});	//这里的this.designArea指的是页面控件视图
 					},
 					render: function(){
 						this.dragSort = {};
 						this.$el.append('<div class="saveBar"></div>');
 						this.$el.append(this.controlsArea.render().el);
 						this.dragSort.$drag = this.controlsArea.$drag();
-						this.$el.append(this.designArea.render().el);
+						this.$el.append(this.designArea.render().el);	
 						this.$el.append(this.attrArea.render().el);
 						this.stickit();
 						return this;
@@ -180,12 +180,27 @@
 					appendControl: function(type){
 						var model = this._createModel(type);
 						this.designArea.appendControl(model);
+					},
+					selectControl: function(cid){
+						var model = _.find(modelList, function(model){
+							return model.cid === cid;
+						});
+						if(!model) {
+							model = this.designArea.model;	//找不到cid的情况下，使用页面控件模型
+						}
+						if(this.activeModel){
+							this.activeModel.view.deactive();	//取消原来的选中
+						}
+						this.activeModel = model;
+						if(this.activeModel){
+							this.activeModel.view.active();	//选中当前的
+						}
 					}
 				});
 				return new viewExtend(options);
 			};
 			return create;
-		})();
+		})();	// 整个页面的视图，管理controlBoxView, controlAreaView和controlDesignView三个子视图
 
 		//控件设计视图
 		mvcHelperExtend.controlDesignView = (function(){
@@ -212,13 +227,22 @@
 						return this;
 					},
 					select: function(e){
-						//if(this.model.get)
+						if(this.model.get('canSelectDesignView')){
+							this.model.appRouter.navigate(this.model.cid + '/select', {trigger: true});
+							this.model.appRouter.navigate('', {trigger: true});
+						}
+					},
+					active: function(){
+						this.$el.addClass('active');
+					},
+					deactive: function(){
+						this.$el.removeClass('active');
 					}
 				});
 				return new viewExtend(options);
 			};
 			return create;
-		})();
+		})();	
 		
 
 		//控件集合视图

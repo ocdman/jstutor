@@ -75,7 +75,10 @@ window.ControlList = {};
 				}else{
 					return $target.html();
 				}
-			}
+			},	//获取嵌套模板
+			getAllModelList: function(){
+
+			}	//根据modelList获取全部model，包括model自身包含的所有分支
 		};
 	})();
 
@@ -117,6 +120,95 @@ window.ControlList = {};
 			name: '',
 			type: 'base',
 			property: ControlList.config.controlDefaultProperty,
+			designBindings: {
+                '[bind=title]': 'title',
+                '.title': {
+                    observe: 'title',
+                    onGet: function (val, options) {
+                        // //debugger;
+                        if (this.model.get('type') == 'page') {
+                            //var title = ControlList.pubFun.getParentPage(this.model).get('title');
+                            //var ary = [{ id: guid(), text: title, value: '1', checked: false }];
+                            //this.model.set('mapSiteItems', ary);
+                        }
+
+
+                        return val;
+                    }
+                },
+                '[name=defaultValue]': 'defaultValue',
+                '[bind=showTitle]': {
+                    attributes: [{
+                        name: 'style',
+                        observe: 'showTitle',
+                        onGet: function (value, options) {
+                            return 'display:' + (value ? 'block' : 'none');
+                        } //显示/隐藏title
+                    }]
+                },
+                '.isRequired': {
+                    observe: 'isRequired',
+                    onGet: function (val, options) {
+                        // //debugger;
+                        return val ? '*' : '';
+                    }
+                },
+                ':el': {
+                    attributes: [{
+                        name: 'class',
+                        observe: 'customClass',
+                        onGet: function (value, options) {
+                            //debugger;
+                            if (value && typeof value == 'object' && value.constructor == Array) {
+                                return value.join(' ');
+                            }
+                            return value;
+                        } //显示/隐藏title
+                    },
+                    {
+                        name: 'class',
+                        observe: 'isVisible',
+                        onGet: function (value, options) {
+                            //return toolBox.stringToBool(value) ? '' : 'isVisibleToHide'; //不显示时，半透明。
+                            return toolBox.stringToBool(value) ? '' : 'hide'; //显示/隐藏
+                        }
+                    },
+                    {
+                        name: 'class',
+                        observe: 'colCount',
+                        onGet: function (value, options) {
+                            if (this.model.get('type') == 'page') {
+                                return '';
+                            }
+                            return value;
+                        }
+                    },
+                    {
+                        name: 'class',
+                        observe: 'float',
+                        onGet: function (value, options) {
+                            return value;
+                        },
+                        onSet: function (value, options) {
+                            return toolBox.stringToBool(value);
+                        }
+                    }
+                    ,{
+                        observe: 'htmlStyles',
+                        name: 'style',
+                        onGet: function (value, options) {
+                            var styles = _.filter(value, function (a) {
+                                return a.value;
+                            });
+                            var list = _.map(styles, function (style) {
+                                return style.code + ':' + style.value;
+                            });
+                            return list.join(';');
+                        }
+                    }
+                    ]
+                }
+            },
 			viewTemplate: {
 				design: function(){ return ''; }
 			},
@@ -138,7 +230,8 @@ window.ControlList = {};
 				},
 				renderOne: function(controlModel){
 					var view = new mvcHelperExtend.controlDesignView({
-						model: controlModel
+						model: controlModel,
+						className: 'controlDesign'
 					});
 					this.$controlsArea().append(view.render().el);
 				},
@@ -146,7 +239,7 @@ window.ControlList = {};
 					this.renderOne(model);	//渲染
 					model.view.select();	//选中
 				}
-			},
+			},	//这里的this指代页面控件视图
 			viewTemplate: {
 				design: function() { 
 					return ControlList.pubFun.getTemplate('tpl-pageDesign'); 

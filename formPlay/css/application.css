@@ -18,7 +18,7 @@ html,body{ height:100%; font-family: "微软雅黑"; color:#666;}  /*不允许�
                padding:0px 10px; height:100%;
                position:absolute; overflow-x:auto;}
 .designArea{ margin-left: 16%; margin-top:4%; /*padding:45px 10px 0px 10px;*/ height:90%;width:64%; overflow:auto; position:absolute; }
-.designArea.active .controlItemDesign .wrapper_btn { display:none;}
+.designArea.active .controlDesign .wrapper_btn { display:none;}
 .designAreaInterior:after {clear:both; display:table; content:""; }
 
 .attrArea { width:20%; background:#fff; border-left:1px solid #d8d8d8; padding:0; margin-left:80%; /*right:-280px;*/ top:0; 
@@ -38,18 +38,18 @@ height: 30px; line-height: 30px; margin-top: 10px; cursor:pointer; transition:.3
 					  
 .controlList .active{ background:#aaa; color:#fff; }
 
-.inline {float:left;} /*动态给controlItemDesign使用*/
+.inline {float:left;} /*动态给controlDesign使用*/
 .inline:after {display:table;content:"";clear:both;}
 
-.controlItemDesign{ border: 1px solid #d8d8d8; padding:2px; margin-top:-1px; position: relative;}
-.controlItemDesign_2 { border: 0px solid #d8d8d8; padding:0px;  margin-top:0px;}
-.controlItemDesign div { /*padding:2px 0;min-height: inherit;*/ min-height: inherit;}
-.controlItemDesign.active{ border:1px solid #69F !important; z-index:9;}
+.controlDesign{ border: 1px solid #d8d8d8; padding:2px; margin-top:-1px; position: relative;}
+.controlDesign_2 { border: 0px solid #d8d8d8; padding:0px;  margin-top:0px;}
+.controlDesign div { /*padding:2px 0;min-height: inherit;*/ min-height: inherit;}
+.controlDesign.active{ border:1px solid #69F !important; z-index:9;}
 
-.controlItemDesign .showTitle { float:left;}
-.controlItemDesign .d_content { float:left;}
-.controlItemDesign:after{ display:block; clear:both;}
-/*.controlItemDesign .controlItemDesign { border:none;}*/
+.controlDesign .showTitle { float:left;}
+.controlDesign .d_content { float:left;}
+.controlDesign:after{ display:block; clear:both;}
+/*.controlDesign .controlDesign { border:none;}*/
 
 .saveButton {background:#169be8; color:#fff; float:right; margin-left:3px; cursor:pointer; min-width:90px; text-align: center;border-radius: 2px;height:30px;line-height:30px; border:none; transition:.3s ease-in;}
 .saveButton:hover{ background:#169be8; color:#fff;}
@@ -99,9 +99,9 @@ background: linear-gradient(top,#ffffff 0%,#ebebeb 90%,#f5f5f5 100%); */ }
 .remove_btn i {color: #e74c3c;}
 .add_btn i,.remove_btn i { font-size:16px; display: inline-block; }
 .active .wrapper_btn { display:block;} 
-.controlItemDesign.active .controlItemDesign .wrapper_btn { display:none;}
+.controlDesign.active .controlDesign .wrapper_btn { display:none;}
 
-/*.controlItemDesign .vessel { border:none !important;}*/
+/*.controlDesign .vessel { border:none !important;}*/
 
 .wrapper_btn a { height:16px; width:20px; padding:0 2px; background:#4977F0; display:inline-block;}
 .wrapper_btn a i { color:#fff;}
@@ -241,7 +241,7 @@ border-bottom: 2px solid #0d72ac; padding:0 20px; cursor:pointer; }
               width:100%; height:100%; border:1px solid #333;
 }
 .cells tr td,.cells tr th{border:1px solid #ccc;width:30px; height:30px; text-align:left; /*overflow:hidden;*/ padding:5px;}
-.cells .controlItemDesign{padding:0px;}
+.cells .controlDesign{padding:0px;}
 
 .activateBeEventPlace { border:1px solid #3385ff !important;}
 .ui_placeholder { height:50px; background:#CDE1FF; border:none; visibility:visible !important;}
