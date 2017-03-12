@@ -120,95 +120,6 @@ window.ControlList = {};
 			name: '',
 			type: 'base',
 			property: ControlList.config.controlDefaultProperty,
-			designBindings: {
-                '[bind=title]': 'title',
-                '.title': {
-                    observe: 'title',
-                    onGet: function (val, options) {
-                        // //debugger;
-                        if (this.model.get('type') == 'page') {
-                            //var title = ControlList.pubFun.getParentPage(this.model).get('title');
-                            //var ary = [{ id: guid(), text: title, value: '1', checked: false }];
-                            //this.model.set('mapSiteItems', ary);
-                        }
-
-
-                        return val;
-                    }
-                },
-                '[name=defaultValue]': 'defaultValue',
-                '[bind=showTitle]': {
-                    attributes: [{
-                        name: 'style',
-                        observe: 'showTitle',
-                        onGet: function (value, options) {
-                            return 'display:' + (value ? 'block' : 'none');
-                        } //显示/隐藏title
-                    }]
-                },
-                '.isRequired': {
-                    observe: 'isRequired',
-                    onGet: function (val, options) {
-                        // //debugger;
-                        return val ? '*' : '';
-                    }
-                },
-                ':el': {
-                    attributes: [{
-                        name: 'class',
-                        observe: 'customClass',
-                        onGet: function (value, options) {
-                            //debugger;
-                            if (value && typeof value == 'object' && value.constructor == Array) {
-                                return value.join(' ');
-                            }
-                            return value;
-                        } //显示/隐藏title
-                    },
-                    {
-                        name: 'class',
-                        observe: 'isVisible',
-                        onGet: function (value, options) {
-                            //return toolBox.stringToBool(value) ? '' : 'isVisibleToHide'; //不显示时，半透明。
-                            return toolBox.stringToBool(value) ? '' : 'hide'; //显示/隐藏
-                        }
-                    },
-                    {
-                        name: 'class',
-                        observe: 'colCount',
-                        onGet: function (value, options) {
-                            if (this.model.get('type') == 'page') {
-                                return '';
-                            }
-                            return value;
-                        }
-                    },
-                    {
-                        name: 'class',
-                        observe: 'float',
-                        onGet: function (value, options) {
-                            return value;
-                        },
-                        onSet: function (value, options) {
-                            return toolBox.stringToBool(value);
-                        }
-                    }
-                    ,{
-                        observe: 'htmlStyles',
-                        name: 'style',
-                        onGet: function (value, options) {
-                            var styles = _.filter(value, function (a) {
-                                return a.value;
-                            });
-                            var list = _.map(styles, function (style) {
-                                return style.code + ':' + style.value;
-                            });
-                            return list.join(';');
-                        }
-                    }
-                    ]
-                }
-            },
 			viewTemplate: {
 				design: function(){ return ''; }
 			},
@@ -224,16 +135,46 @@ window.ControlList = {};
 		return {
 			name: '页面',
 			type: 'page',
+			designRender: {
+				before: function(){},
+				after: function(){
+					this.sort();
+				}
+			},
 			designMethod: {
-				$controlsArea: function(){
+				$sort: function(){
+					return this.$designAreaInterior();
+				},
+				$designAreaInterior: function(){
 					return this.$('> .designAreaInterior');
 				},
+				sort: function(){
+					this.$sort().sortable({
+						items: '> .controlDesign',	//只允许直系子元素排序
+						revert: true,
+						start: function(e, ui){
+
+						},
+						update: function(e, ui){
+							if(ui.item.is('.controlFace')){	//如果是从"工具箱"拖拽过来的
+
+							}
+						},
+						change: function(evt, ui){
+							if(ui.placeholder){
+
+							}
+						}
+					});
+					this.model.appRouter.navigate(this.model.cid + '/$sort/linkSort', {trigger: true});	//让设计区域控件排序功能 与工具箱控件的拖拉关联
+					this.model.appRouter.navigate('', {trigger: true});
+				},	//设计区域控件排序
 				renderOne: function(controlModel){
 					var view = new mvcHelperExtend.controlDesignView({
 						model: controlModel,
 						className: 'controlDesign'
 					});
-					this.$controlsArea().append(view.render().el);
+					this.$designAreaInterior().append(view.render().el);
 				},
 				appendControl: function(model){
 					this.renderOne(model);	//渲染

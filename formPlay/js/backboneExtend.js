@@ -33,6 +33,7 @@
 				callback();
 			}
 		}
+		return this;
 	};	//拷贝model相对应区域的属性到视图，然后渲染视图。这里的this是指  视图，需要用call来调用这个方法，如：render.call(mvc视图,viewPlace)。
 
 	(function(){
@@ -177,6 +178,24 @@
 						}
 						return model;
 					},
+					linkSort: function(cid, sort){
+						var model = _.find(modelList, function(model){
+							return model.cid === cid;
+						});
+						if(!model){
+							return;
+						}
+						var view = model.designView;
+						var $sort = view[sort].call(view);
+						if(!this.dragSort.$sort){
+							this.dragSort.$sort = $sort;
+						}else{
+							this.dragSort.$sort = this.dragSort.$sort.add($sort);	//添加新的排序元素
+						}
+						this.dragSort.$sort = this.dragSort.$sort.filter('.ui-sortable');	//过滤失效的排序元素
+						this.dragSort.$sort.sortable('option', 'connectWith', this.dragSort.$sort);	//关联 排序与排序
+						this.dragSort.$drag.draggable('option', 'connectToSortable', this.dragSort.$sort);	//关联 拖拉与排序
+					},
 					appendControl: function(type){
 						var model = this._createModel(type);
 						this.designArea.appendControl(model);
@@ -218,8 +237,8 @@
 					render: function(){
 						if(this.model){
 							render.call(this, 'design');
-							if(this.model.get('cannotRemove')){
-
+							if(!this.model.get('cannotRemove')){
+								this.$el.append('<div class="wrapper_btn additions"><a href="#" class="add_btn"><i class="icon-plus"></i></a><a href="#" class="remove_btn"><i class="icon-minus"></i></a></div>');	//关闭按钮与复制按钮
 							}
 						}else{
 							this.$el.empty();
