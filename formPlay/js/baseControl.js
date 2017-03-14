@@ -72,9 +72,17 @@ window.ControlList = {};
 				if($target.length === 0){
 					console.log('模板"' + id + '"不存在');
 					return;
-				}else{
-					return $target.html();
 				}
+				var tpl = $target.html();
+				var matches = tpl.match(/\[\[\[(.+?)\]\]\]/gm);
+				if(matches){
+					for(var i = 0; i < matches.length; i++){
+						var id = matches[i].replace('[[[','').replace(']]]','');
+						var childTpl = ControlList.pubFun.getTemplate(id);
+						tpl = tpl.replace(matches[i], childTpl);
+					}
+				}
+				return tpl;
 			},	//获取嵌套模板
 			getAllModelList: function(){
 
@@ -190,6 +198,9 @@ window.ControlList = {};
 			viewTemplate: {
 				design: function() { 
 					return ControlList.pubFun.getTemplate('tpl-pageDesign'); 
+				},
+				attr: function(){
+					return ControlList.pubFun.getTemplate('tpl-pageAttr'); 	
 				}
 			},
 			newObj: function(values){

@@ -10,6 +10,7 @@
 
 </head>
 <body>
+	<!--工具箱-->
 	<script type="text/template" id="tpl-controlsArea">
 		<a class="r_close">
 			<i class="icon-chevron-left"></i>
@@ -43,6 +44,7 @@
 		</div>
 	</script>
 
+	<!--保存栏-->
 	<script type="text/template" id="tpl-designArea-saveBar">
 		<div class="saveButtonGroups" style="display:inline;">
 			<input type="button" class="saveButton" value="保存为表单组" formtype="2" />
@@ -51,9 +53,37 @@
 		</div>
 	</script>
 
+	<!--通用样式调整模板-->
+	<!--用法: [[[tpl-attrHtmlStyleView]]]-->
+	<script type="text/template" id="tpl-attrHtmlStyleView">
+		<tr>
+		    <td>样式微调</td>
+		    <td><select bind="htmlStyle"></select></td>
+		</tr>
+		<tr>
+		    <td colspan="2">
+		        <div bind="htmlStyleList"></div>
+		    </td>
+		</tr>
+	</script>
+
+
 	<!--PAGE区域-->
 	<script type="text/template" id="tpl-pageDesign">
 		<div class="designAreaInterior" style="height:100%;width:100%;padding-top:10px;overflow-x:hidden;"></div>
+	</script>
+
+	<script type="text/template" id="tpl-pageAttr">
+		<table cellpadding="0" cellspacing="0">
+	        <tr>
+	            <td colspan="2">控件类型：<label class="name"></label></td>
+	        </tr>
+	        <tr>
+	            <td>表单名称</td>
+	            <td><input name="title"></td>
+	        </tr>
+	        [[[tpl-attrHtmlStyleView]]]
+	    </table>
 	</script>
 
 	<!--TEXT区域-->

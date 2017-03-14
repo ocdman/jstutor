@@ -332,8 +332,13 @@
 					initialize: function(){
 
 					},
-					render: function(){
-						this.$el.empty();
+					render: function(model){
+						this.model = model;
+						if(this.model){
+							render.call(this, 'attr');
+						}else{
+							this.$el.empty();
+						}
 						return this;
 					}
 				});
