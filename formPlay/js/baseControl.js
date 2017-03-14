@@ -153,7 +153,8 @@ window.ControlList = {};
 					this.$sort().sortable({
 						items: '> .controlDesign',	//只允许直系子元素排序
 						revert: true,
-						placeholder: 'highlight',
+						placeholder: 'ui_placeholder',
+						distance: 15,
 						start: function(e, ui){
 							console.log(e);
 						},
@@ -164,12 +165,12 @@ window.ControlList = {};
 								self.model.appRouter.navigate(controlType + '/insert', { trigger: true});
 								self.model.appRouter.navigate('', { trigger: true});
 							}
-						},
-						change: function(evt, ui){
-							if(ui.placeholder){
-								ui.placeholder.addClass('ui_placeholder');
-							}
 						}
+						// change: function(evt, ui){
+						// 	if(ui.placeholder){
+						// 		ui.placeholder.addClass('ui_placeholder');
+						// 	}
+						// }
 					});
 					this.model.appRouter.navigate(this.model.cid + '/$sort/linkSort', {trigger: true});	//让设计区域控件排序功能 与工具箱控件的拖拉关联
 					this.model.appRouter.navigate('', {trigger: true});

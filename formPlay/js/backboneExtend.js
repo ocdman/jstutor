@@ -72,27 +72,27 @@
 		mvcHelperExtend.AppRouter = Backbone.Router.extend({
 			appView: null,
 			routes: {
-				':cid/:sort/linkSort': 'linkSort',
-				':cid/select': 'selectControl',
-				':cid/remove': 'removeControl',
-				':type/append': 'appendControl',
-				':type/insert': 'insertControl'
+				':cid/:sort/linkSort': 'linkSort',	//允许工具箱控件拖拽到设计视图,并排序
+				':cid/select': 'selectControl',	//选中控件
+				':cid/remove': 'removeControl',	//移除控件
+				':type/append': 'appendControl',	//单击工具箱控件后
+				':type/insert': 'insertControl'	//拖拽工具箱控件后
 			},
 			linkSort: function(cid, sort){
 				this.appView.linkSort(cid, sort);
-			},
+			},	
 			selectControl: function(cid){
 				this.appView.selectControl(cid);
-			},
+			},	
 			removeControl: function(cid){
 				this.appView.removeControl(cid);
-			},
+			},	
 			appendControl: function(type){
 				this.appView.appendControl(type);
-			},
+			},	
 			insertControl: function(type){
 				this.appView.insertControl(type);
-			}
+			}	
 		});
 
 		//程序入口视图
@@ -235,6 +235,9 @@
 			var create = function(options){
 				var viewExtend = Backbone.View.extend({
 					className: options.className,
+					events: {
+						'click': 'select'
+					},
 					initialize: function(){
 						if(this.model){
 							if(this.model.view){
@@ -258,6 +261,9 @@
 						if(this.model.get('canSelectDesignView')){
 							this.model.appRouter.navigate(this.model.cid + '/select', {trigger: true});
 							this.model.appRouter.navigate('', {trigger: true});
+							if(e){
+								e.stopPropagation();
+							}
 						}
 					},
 					active: function(){

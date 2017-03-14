@@ -41,7 +41,7 @@ height: 30px; line-height: 30px; margin-top: 10px; cursor:pointer; transition:.3
 .inline {float:left;} /*动态给controlDesign使用*/
 .inline:after {display:table;content:"";clear:both;}
 
-.controlDesign{ border: 1px solid #d8d8d8; padding:2px; margin-top:-1px; position: relative;}
+.controlDesign{ border: 1px solid #d8d8d8; padding:6px; margin-top:-1px; position: relative;}
 .controlDesign_2 { border: 0px solid #d8d8d8; padding:0px;  margin-top:0px;}
 .controlDesign div { /*padding:2px 0;min-height: inherit;*/ min-height: inherit;}
 .controlDesign.active{ border:1px solid #69F !important; z-index:9;}
