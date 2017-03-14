@@ -149,20 +149,25 @@ window.ControlList = {};
 					return this.$('> .designAreaInterior');
 				},
 				sort: function(){
+					var self = this;
 					this.$sort().sortable({
 						items: '> .controlDesign',	//只允许直系子元素排序
 						revert: true,
+						placeholder: 'highlight',
 						start: function(e, ui){
-
+							console.log(e);
 						},
 						update: function(e, ui){
 							if(ui.item.is('.controlFace')){	//如果是从"工具箱"拖拽过来的
-
+								var controlType = ui.item.attr('controltype');
+								ui.item.replaceWith('<div id="insertplaceholder">占位符</div>');
+								self.model.appRouter.navigate(controlType + '/insert', { trigger: true});
+								self.model.appRouter.navigate('', { trigger: true});
 							}
 						},
 						change: function(evt, ui){
 							if(ui.placeholder){
-
+								ui.placeholder.addClass('ui_placeholder');
 							}
 						}
 					});

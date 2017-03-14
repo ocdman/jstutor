@@ -200,6 +200,15 @@
 						var model = this._createModel(type);
 						this.designArea.appendControl(model);
 					},
+					insertControl: function(type){
+						var model = this._createModel(type);
+						var view = new mvcHelperExtend.controlDesignView({
+							model: model,
+							className: 'controlDesign'
+						});
+						this.designArea.$el.find('#insertplaceholder').replaceWith(view.render().el);	//用控件设计视图替换 占位符
+						view.select();
+					},
 					selectControl: function(cid){
 						var model = _.find(modelList, function(model){
 							return model.cid === cid;
@@ -297,7 +306,7 @@
 						return this.$('.controlList').find('.controlFace');
 					},
 					select: function(e){
-					   	appRouter.navigate($(e.target).attr('controltype') + '/append', { trigger: true })
+					   	appRouter.navigate($(e.target).attr('controltype') + '/append', { trigger: true });
 						appRouter.navigate('', {trigger: true});
 					}
 				});
