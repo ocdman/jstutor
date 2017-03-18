@@ -23,8 +23,7 @@
 			this.$el.attr({ originalClass: 'controlDesign class_' + viewPlace + '_' + this.model.get('type')});
 		}
 		this.$el.addClass('class_' + viewPlace + '_' + this.model.get('type'));
-		//this.$el.html(Handlebars.compile(this.model.get('viewTemplate')[viewPlace]())(this.model.attributes));
-		this.$el.html(Handlebars.compile(this.model.get('viewTemplate')[viewPlace]())());
+		this.$el.html(Handlebars.compile(this.model.get('viewTemplate')[viewPlace]())(this.model.attributes));
 		this.stickit(this.model, $.extend(true, {}, this.model.get(viewPlace + 'Bindings'), this.bindings));
 
 		if(renderFunc && renderFunc.after){

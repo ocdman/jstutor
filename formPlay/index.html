@@ -80,6 +80,7 @@
 
 	<!--基本属性视图 2-->
 	<script type="text/template" id="tpl-attrBase_2">
+		[[[tpl-attrBase_3]]]
 	    <tr>
 	        <td>样式</td>
 	        <td>
@@ -95,11 +96,30 @@
 	            <label><input type="radio" value="" name="float_xx_w242342342342123123rewwer" />不浮动</label>
 	        </td>
 	    </tr>
-	    [[[tpl-attrBase_3]]]
+	    [[[tpl-attrBase_4]]]
 	</script>
 
 	<!--基本属性视图 3-->
 	<script type="text/template" id="tpl-attrBase_3">
+		<tr>
+			<td colspan="2">
+				控件类型：<label class="name"></label>
+				<br />
+				<input value="{{id}}" readonly style="border:none; width:100%;"/>
+			</td>
+		</tr>
+		<tr>
+			<td>控件名称</td>
+			<td><input name="title"/></td>
+		</tr>
+		<tr>
+			<td>显示</td>
+			<td><input name="isVisible" type="checkbox"/></td>
+		</tr>
+	</script>
+
+	<!--基本属性视图 4-->
+	<script type="text/template" id="tpl-attrBase_4">
 	    <tr><td>超小屏幕 手机 (<768px)</td><td><select name="colCount-xs"></select></td></tr>
 	    <tr><td>小屏幕 平板 (≥768px)</td><td><select name="colCount-sm"></select></td></tr>
 	    <tr><td>中等屏幕 桌面显示器 (≥992px)</td><td><select name="colCount-md"></select></td></tr>

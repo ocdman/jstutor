@@ -25,6 +25,7 @@ window.ControlList = {};
 
 	ControlList.config = (function(){
 		return {
+			idsCache: {},	//记录各类型控件添加时的个数:相应类型的值加1。
 			controlDefaultProperty: {
 				canConfig: true, //可配置
                 title: '',
@@ -231,6 +232,9 @@ window.ControlList = {};
 			type: 'base',
 			property: ControlList.config.controlDefaultProperty,
 			attrBindings: {
+				'.name': 'name',
+				'[name=title]': 'title',
+				'input[name=isVisible]': 'isVisible',
 				'[bind=htmlStyle]': {
 					observe: 'temp_sxad',
 					selectOptions: {
@@ -360,6 +364,18 @@ window.ControlList = {};
                     },
                 }
 			},
+			afterCreate: function(){
+				var self = this;
+				(function(){
+					if(self.get('title') === '' || self.get('title') === this.get('name')){
+						if(!ControlList.config.idsCache[self.get('type')]){
+							ControlList.config.idsCache[self.get('type')] = 0;
+						}
+						ControlList.config.idsCache[self.get('type')]++;
+						self.set({title: self.get('name') + '_' +  ControlList.config.idsCache[self.get('type')]});
+					}
+				})();	//设置控件名称
+			},	//这里的this指的是backbone控件模型
 			viewTemplate: {
 				design: function(){ return ''; }
 			},
