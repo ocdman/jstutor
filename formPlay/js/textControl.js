@@ -22,6 +22,9 @@
 			viewTemplate: {
 				design: function(){
 					return ControlList.pubFun.getTemplate('tpl-textDesign');
+				},
+				attr: function(){
+					return ControlList.pubFun.getTemplate('tpl-textAttr');	
 				}
 			},
 			newObj: function(values){

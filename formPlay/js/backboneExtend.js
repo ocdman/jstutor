@@ -23,7 +23,8 @@
 			this.$el.attr({ originalClass: 'controlDesign class_' + viewPlace + '_' + this.model.get('type')});
 		}
 		this.$el.addClass('class_' + viewPlace + '_' + this.model.get('type'));
-		this.$el.html(Handlebars.compile(this.model.get('viewTemplate')[viewPlace]())(this.model.attributes));
+		//this.$el.html(Handlebars.compile(this.model.get('viewTemplate')[viewPlace]())(this.model.attributes));
+		this.$el.html(Handlebars.compile(this.model.get('viewTemplate')[viewPlace]())());
 		this.stickit(this.model, $.extend(true, {}, this.model.get(viewPlace + 'Bindings'), this.bindings));
 
 		if(renderFunc && renderFunc.after){
@@ -34,7 +35,7 @@
 			}
 		}
 		return this;
-	};	//拷贝model相对应区域的属性到视图，然后渲染视图。这里的this是指  视图，需要用call来调用这个方法，如：render.call(mvc视图,viewPlace)。
+	};	// 被设计和属性视图共用的方法。拷贝model相对应区域的属性到视图，然后渲染视图。这里的this是指  视图，需要用call来调用这个方法，如：render.call(mvc视图,viewPlace)。
 
 	(function(){
 
@@ -47,7 +48,7 @@
 						var options = this.get('options');
 						delete this.options;
 						for(var key in options){
-							this[key] = options[key];
+							this[key] = options[key];	//将options的属性(modelList和appRouter)直接拷贝到模型属性中
 						}
 						var afterCreate = this.get('afterCreate');
 						if(afterCreate && typeof afterCreate == 'function'){
@@ -101,7 +102,7 @@
 				var formTypeCName = {0: '表单', 1: '元件', 2: '表单组'};
 				var appRouter = options.appRouter;
 				var pageModel;
-				var modelList = [];
+				var modelList = [];	 //控件模型数组
 
 				var viewExtend = Backbone.View.extend({
 					className: options.className,
@@ -121,7 +122,7 @@
 						}
 					},
 					initialize: function(options){
-						this.modelList = modelList
+						this.modelList = modelList;
 						this.tools = options.toolbox.tools;
 						this.toolkits = options.toolbox.toolkits;
 						this.sets = options.toolbox.sets;
@@ -155,15 +156,15 @@
 						});	//这里的this.designArea指的是页面控件视图
 					},
 					render: function(){
-						this.dragSort = {};
+						this.dragSort = {};	//管理工具箱控件的拖拽和设计视图的排序对象
 						this.$el.append('<div class="saveBar"></div>');
-						this.$el.append(this.controlsArea.render().el);
-						this.dragSort.$drag = this.controlsArea.$drag();
-						this.$el.append(this.designArea.render().el);	
-						this.$el.append(this.attrArea.render().el);
-						this.stickit();
+						this.$el.append(this.controlsArea.render().el);	//渲染工具箱区域
+						this.dragSort.$drag = this.controlsArea.$drag();	//保存初始化好的拖拽对象
+						this.$el.append(this.designArea.render().el);	//渲染设计区域
+						this.$el.append(this.attrArea.render().el);	//渲染属性区域
+						this.stickit();	//backbone stickit插件，执行了this.bindings对象里的方法
 						return this;
-					},
+					},	//该渲染方法随着程序的进入只会调用一次
 					_createModel: function(type){
 						var model = null;
 						if(type.indexOf('group') === 0){
@@ -223,6 +224,7 @@
 						if(this.activeModel){
 							this.activeModel.view.active();	//选中当前的
 						}
+						this.attrArea.render(this.activeModel);	//更新属性区域
 					}
 				});
 				return new viewExtend(options);
@@ -285,7 +287,7 @@
 				var appRouter = options.appRouter;
 				var viewExtend = Backbone.View.extend({
 					className: options.className,
-					template: $('#tpl-controlsArea').html(),
+					template: $('#tpl-controlsArea').html(),	//使用模板
 					events: {
 						'click .controlFace': 'select'
 					},
@@ -293,11 +295,11 @@
 					},
 					render: function(){
 						this.$el.html(Handlebars.compile(this.template)(options.toolbox));
-						this.drag();
+						this.drag();	//初始化工具箱控件拖拽功能
 						this.$el.find('[bind=accordion]').accordion({collapsible: true, active: false});
 						this.$el.find('.ui-accordion-content').css({ height: 'auto' });
 						return this;
-					},
+					},	//该渲染工具箱视图的方法只会被调用一次
 					drag: function(){
 						this.$drag().draggable({
 							helper: 'clone',
