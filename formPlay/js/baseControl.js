@@ -234,7 +234,9 @@ window.ControlList = {};
 			attrBindings: {
 				'.name': 'name',
 				'[name=title]': 'title',
+				'[name=defaultValue]': 'defaultValue',
 				'input[name=isVisible]': 'isVisible',
+				'[name=float_xx_w242342342342123123rewwer]': 'float',
 				'[bind=htmlStyle]': {
 					observe: 'temp_sxad',
 					selectOptions: {
@@ -250,7 +252,6 @@ window.ControlList = {};
                     observe: 'colCountXS',
                     selectOptions: {
                         collection: function () {
-                            //{ name: '', value: '' }
                             var arr = [0, 8, 16, 25, 33, 41, 50, 58, 66, 75, 83, 91, 100];
                             var ret = [{ name: '无', value: '' }];
                             for (var i = 1; i < 13; i++) {
@@ -266,12 +267,9 @@ window.ControlList = {};
                         value: 'col-xs-12'
                     },
                     onGet: function (val) {
-                        // Return an array of the ids so that stickit can match them to select options.
                         return val;
                     },
                     onSet: function (val) {
-                        //debugger;
-                        // Format the array of ids into a dash-delimited String before setting.
                         this.model.set('colCount', val + ' ' + this.model.get('colCountSM') + ' ' + this.model.get('colCountMD') + ' ' + this.model.get('colCountLG'));
                         return val;
                     }
@@ -296,13 +294,10 @@ window.ControlList = {};
                         value: 'col-sm-12'
                     },
                     onGet: function (val) {
-                        // Return an array of the ids so that stickit can match them to select options.
                         return val;
                     },
                     onSet: function (val) {
-
                         this.model.set('colCount', this.model.get('colCountXS') + ' ' + val + ' ' + this.model.get('colCountMD') + ' ' + this.model.get('colCountLG'));
-
                         return val;
                     }
                 },
@@ -310,7 +305,6 @@ window.ControlList = {};
                     observe: 'colCountMD',
                     selectOptions: {
                         collection: function () {
-                            //{ name: '', value: '' }
                             var arr = [0, 8, 16, 25, 33, 41, 50, 58, 66, 75, 83, 91, 100];
                             var ret = [{ name: '无', value: '' }];
                             for (var i = 1; i < 13; i++) {
@@ -326,13 +320,10 @@ window.ControlList = {};
                         value: 'col-md-12'
                     },
                     onGet: function (val) {
-                        // Return an array of the ids so that stickit can match them to select options.
                         return val;
                     },
                     onSet: function (val) {
-
                         this.model.set('colCount', this.model.get('colCountXS') + ' ' + this.model.get('colCountSM') + ' ' + val + ' ' + this.model.get('colCountLG'));
-
                         return val;
                     }
                 },
@@ -340,7 +331,6 @@ window.ControlList = {};
                     observe: 'colCountLG',
                     selectOptions: {
                         collection: function () {
-                            //{ name: '', value: '' }
                             var arr = [0, 8, 16, 25, 33, 41, 50, 58, 66, 75, 83, 91, 100];
                             var ret = [{ name: '无', value: '' }];
                             for (var i = 1; i < 13; i++) {
@@ -363,6 +353,34 @@ window.ControlList = {};
                         return val;
                     },
                 }
+			},
+			designBindings: {
+				'[name=defaultValue]': 'defaultValue',
+				':el': {
+					attributes: [{
+						name: 'class',	
+						observe: 'isVisible',
+						onGet: function(value, options){
+							return toolBox.stringToBool(value) ? '' : 'hidden-xs-up';	//显示/隐藏
+						}
+					},{
+						name: 'class',
+						observe: 'float',
+						onGet: function(value, options){
+							return value;
+						}
+
+					},{
+						name: 'class',
+						observe: 'colCount',
+						onGet: function(value, options){
+							if(this.model.get('type') === 'page'){
+								return '';
+							}
+							return value;
+						}
+					}]
+				}
 			},
 			afterCreate: function(){
 				var self = this;
