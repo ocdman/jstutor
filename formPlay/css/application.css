@@ -17,7 +17,7 @@ html,body{ height:100%; font-family: "微软雅黑"; color:#666;}  /*不允许�
 .controlsArea{ width:16%;  background:#eee; border-right:1px solid #d8d8d8; float:left; 
                padding:0px 10px; height:100%;
                position:absolute; overflow-x:auto;}
-.designArea{ margin-left: 16%; margin-top:4%; /*padding:45px 10px 0px 10px;*/ height:90%;width:64%; overflow:auto; position:absolute; }
+.designArea{ margin-left: 16%; top:10%; /*padding:45px 10px 0px 10px;*/ height:90%;width:64%; overflow:auto; position:absolute; }
 .designArea.active .controlDesign .wrapper_btn { display:none;}
 .designAreaInterior:after {clear:both; display:table; content:""; }
 
