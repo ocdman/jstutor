@@ -53,6 +53,14 @@
 		</div>
 	</script>
 
+	<!--样式微调 单项-->
+	<script type="text/template" id="tpl-attrHtmlStyle">
+		<div styleindex="{{index}}" style="margin-bottom: 5px;">
+			<span style="width: 60px; text-align: left; float: left;">{{name}}</span>
+			<input type="button" value="移除" bind="removeStyle" class="btn btn-outline btn-gray btn-xs"/>
+		</div>
+	</script>
+
 	<!--通用样式调整模板-->
 	<!--用法: [[[tpl-attrHtmlStyleView]]]-->
 	<script type="text/template" id="tpl-attrHtmlStyleView">

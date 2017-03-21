@@ -189,7 +189,21 @@ window.ControlList = {};
                     ]
                 };
                 return list;
-            })()
+            })(),
+            getHtmlStyle: function(code){
+            	for(var key in ControlList.pubFun.htmlStyles){
+            		if(key === 'opt_labels'){
+            			continue;
+            		}
+            		var style = ControlList.pubFun.htmlStyles[key].firstOrNull(function(item){
+            			return item.code === code;
+            		});
+            		if(style){
+            			return toolBox.clone(style);
+            		}
+            	}
+            	return null;
+            }
 		};
 	})();
 
@@ -246,6 +260,30 @@ window.ControlList = {};
                         },
                         labelPath: 'name',
                         valuePath: 'code'
+					},
+					onSet: function(value, options){
+						var htmlStyles = this.model.get('htmlStyles');
+						var style = ControlList.pubFun.getHtmlStyle(value);
+						var bool = htmlStyles.addByFun(style, function(s, hsItem){
+							return s.code !== hsItem.code;
+						});
+						if(bool){
+							this.model.trigger('change:htmlStyles', this.model);
+						}
+						$(options.selector).val('');	//设置成默认值
+					}
+				},
+				'[bind=htmlStyleList]': {
+					observe: 'htmlStyles',
+					updateMethod: 'html',
+					onGet: function(value, options){
+						var self = this;
+						var index = 0;
+						return _.map(value, function(item){
+							item = toolBox.clone(item);
+							item.index = index++;
+							return Handlebars.compile(self.model.get('viewTemplate').attrHtmlStyle())(item);
+						});
 					}
 				},
                 'select[name=colCount-xs]': {//bootstrap布局
@@ -395,7 +433,8 @@ window.ControlList = {};
 				})();	//设置控件名称
 			},	//这里的this指的是backbone控件模型
 			viewTemplate: {
-				design: function(){ return ''; }
+				design: function(){ return ''; },
+				attrHtmlStyle: function() { return ControlList.getTemplate('tpl-attrHtmlStyle'); }
 			},
 			newObj: function(values){
 				var base = $.extend(true, {}, ControlList._control.newObj(values), this);

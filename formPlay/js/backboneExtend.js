@@ -102,6 +102,7 @@
 				var appRouter = options.appRouter;
 				var pageModel;
 				var modelList = [];	 //控件模型数组
+				var previousActiveModel;	//上一个被激活的控件模型
 
 				var viewExtend = Backbone.View.extend({
 					className: options.className,
@@ -223,7 +224,10 @@
 						if(this.activeModel){
 							this.activeModel.view.active();	//选中当前的
 						}
-						this.attrArea.render(this.activeModel);	//更新属性区域
+						if(previousActiveModel !== model){
+							this.attrArea.render(this.activeModel);	//激活不同控件模型，才更新属性区域
+						}
+						previousActiveModel = model;	//保存上一次的记录
 					}
 				});
 				return new viewExtend(options);
@@ -334,6 +338,12 @@
 
 					},
 					render: function(model){
+						if (this.model) //清理工作，移除上一个model绑定的所有属性事件
+	                    {
+	                        this.unbind();
+	                        this.undelegateEvents();
+	                        this.unstickit(this.model, this.model.get('attrBindings')); //（插件：backbone.stickit）
+	                    }
 						this.model = model;
 						if(this.model){
 							render.call(this, 'attr');
