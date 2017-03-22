@@ -8,7 +8,8 @@
 		if($parent){
 			$parent.append(this.$el);
 		}
-		$.extend(true, this, this.model.get(viewPlace + 'Method'));
+		$.extend(true, this, this.model.get(viewPlace + 'Method'));	//把控件的方法拷贝到视图上
+		this.delegateEvents($.extend(true, {}, this.model.get(viewPlace + 'Events'), this.events));	//把控件的事件和视图绑定
 
 		var renderFunc = this.model.get(viewPlace + 'Render');
 		if(renderFunc && renderFunc.before){
@@ -338,7 +339,7 @@
 
 					},
 					render: function(model){
-						if (this.model) //清理工作，移除上一个model绑定的所有属性事件
+						if (this.model) //清理工作，移除上一个model绑定的所有属性事件以及属性视图的委托
 	                    {
 	                        this.unbind();
 	                        this.undelegateEvents();

@@ -36,7 +36,7 @@ window.ControlList = {};
                 colCountMD: 'col-md-12',
                 colCountLG: 'col-lg-12',
                 isVisible: true,
-                float: 'fl', //fl/fr 左/右浮动
+                float: '', //fl/fr 左/右浮动
                 htmlStyles: [], //样式
                 showTitle: false, //显示/隐藏标题（默认不显示/以前默认显示。）
                 defaultValue: '',                       //默认值
@@ -245,6 +245,18 @@ window.ControlList = {};
 			name: '',
 			type: 'base',
 			property: ControlList.config.controlDefaultProperty,
+			attrEvents: {
+				'click [bind=removeStyle]': 'removeStyle'
+			},
+			attrMethod: {
+				removeStyle: function(e){
+					var $parent = $(e.target).parent('[styleindex]');
+					var index = parseInt($parent.attr('styleindex'));
+					var htmlStyles = this.model.get('htmlStyles');
+					htmlStyles.remove(htmlStyles[index]);
+					this.model.trigger('change:htmlStyles', this.model);
+				}
+			},
 			attrBindings: {
 				'.name': 'name',
 				'[name=title]': 'title',
@@ -283,7 +295,7 @@ window.ControlList = {};
 							item = toolBox.clone(item);
 							item.index = index++;
 							return Handlebars.compile(self.model.get('viewTemplate').attrHtmlStyle())(item);
-						});
+						});	//绘制样式微调列表区域
 					}
 				},
                 'select[name=colCount-xs]': {//bootstrap布局
@@ -407,7 +419,6 @@ window.ControlList = {};
 						onGet: function(value, options){
 							return value;
 						}
-
 					},{
 						name: 'class',
 						observe: 'colCount',
@@ -434,7 +445,7 @@ window.ControlList = {};
 			},	//这里的this指的是backbone控件模型
 			viewTemplate: {
 				design: function(){ return ''; },
-				attrHtmlStyle: function() { return ControlList.getTemplate('tpl-attrHtmlStyle'); }
+				attrHtmlStyle: function() { return ControlList.pubFun.getTemplate('tpl-attrHtmlStyle'); }
 			},
 			newObj: function(values){
 				var base = $.extend(true, {}, ControlList._control.newObj(values), this);
@@ -467,7 +478,6 @@ window.ControlList = {};
 						items: '> .controlDesign',	//只允许直系子元素排序
 						revert: true,
 						placeholder: 'ui_placeholder',
-						distance: 15,
 						start: function(e, ui){
 							console.log(e);
 						},
@@ -479,11 +489,6 @@ window.ControlList = {};
 								self.model.appRouter.navigate('', { trigger: true});
 							}
 						}
-						// change: function(evt, ui){
-						// 	if(ui.placeholder){
-						// 		ui.placeholder.addClass('ui_placeholder');
-						// 	}
-						// }
 					});
 					this.model.appRouter.navigate(this.model.cid + '/$sort/linkSort', {trigger: true});	//让设计区域控件排序功能 与工具箱控件的拖拉关联
 					this.model.appRouter.navigate('', {trigger: true});
